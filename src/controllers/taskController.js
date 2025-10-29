@@ -1,22 +1,32 @@
+// src/controllers/taskController.js
 import * as taskService from '../services/taskService.js';
 
 export async function getTasks(req, res, next) {
-  const tasks = await taskService.getAllTasks();
-  res.json(tasks);
+  try {
+    const tasks = await taskService.getAllTasks();
+    res.json(tasks);
+  } catch (err) {
+    next(err);
+  }
 }
 
 export async function createTask(req, res, next) {
-  const { title, completed } = req.body;
-  const task = await taskService.createTask({ title, completed });
-  res.status(201).json(task);
+  try {
+    const { title, completed } = req.body;
+    const task = await taskService.createTask({ title, completed });
+    res.status(201).json(task);
+  } catch (err) {
+    next(err);
+  }
 }
+
 
 export async function getTaskById(req, res, next) {
   try {
-    const idNum = parseInt(req.params.id, 10);
+    const idNum = Number(req.params.id);
 
-
-    if (Number.isNaN(idNum)) {
+   
+    if (!Number.isInteger(idNum) || idNum <= 0) {
       return res.status(400).json({
         error: 'Validation failed',
         details: ['ID must be a number'],
@@ -24,7 +34,6 @@ export async function getTaskById(req, res, next) {
     }
 
     const task = await taskService.getTaskById(idNum);
-
     if (!task) {
       return res.status(404).json({ error: 'Task not found' });
     }

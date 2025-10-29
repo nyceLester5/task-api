@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/', taskController.getTasks);
 router.post('/', validateTask, taskController.createTask);
 
-// NEW: GET /tasks/:id
+
 router.get('/:id', validateId, taskController.getTaskById);
 
 export default router;

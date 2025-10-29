@@ -4,14 +4,13 @@ info:
   version: 1.0.0
 servers:
   - url: http://localhost:3000
-    description: Local development servers
+    description: Local development server
   - url: https://task-api-s18z.onrender.com
-    description: Production server on render
+    description: Production server on Render
 tags:
   - name: Tasks
     description: Task-related endpoints
+
 paths:
-  /tasks:
-    $ref: paths/tasks.yaml#/~1tasks
-  /tasks/{id}:
-    $ref: paths/tasks.yaml#/~1tasks~1{id}
+  $ref: ./paths/tasks.yaml
+
