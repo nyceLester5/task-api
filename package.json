@@ -8,7 +8,9 @@
     "start": "node src/server.js",
     "migrate:dev": "npx prisma migrate dev",
     "migrate:deploy": "npx prisma migrate deploy",
-    "seed": "node prisma/seed.js"
+    "seed": "node prisma/seed.js",
+    "build": "npx prisma migrate deploy && npm run seed && npx @redocly/cli bundle docs/openapi.yaml -o public/bundled.yaml"
+    
   },
   "keywords": [
     "node",

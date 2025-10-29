@@ -1,47 +1,60 @@
-get:
-  summary: List all tasks
-  tags:
-    - Tasks
-  parameters:
-    - name: completed
-      in: query
-      required: false
-      description: Filter tasks by completion status
-      schema:
-        type: boolean
-        example: true
-    - name: limit
-      in: query
-      required: false
-      description: Maximum number of tasks to return
-      schema:
-        type: integer
-        example: 10
-  responses:
-    '200':
-      description: OK
+/tasks:
+  get:
+    tags: [Tasks]
+    summary: List all tasks
+    responses:
+      '200':
+        description: A list of tasks
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: ../components/schemas/Task.yaml
+  post:
+    tags: [Tasks]
+    summary: Create a new task
+    requestBody:
+      required: true
       content:
         application/json:
           schema:
-            type: array
-            items:
+            type: object
+            required: [title]
+            properties:
+              title:
+                type: string
+              completed:
+                type: boolean
+    responses:
+      '201':
+        description: Created task
+        content:
+          application/json:
+            schema:
               $ref: ../components/schemas/Task.yaml
-post:
-  summary: Create a new task
-  tags:
-    - Tasks
-  requestBody:
-    required: true
-    content:
-      application/json:
+      '400':
+        $ref: ../components/responses/BadRequest.yaml
+
+/tasks/{id}:
+  get:
+    tags: [Tasks]
+    summary: Get a task by ID
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Numeric task ID
         schema:
-          $ref: ../components/schemas/Task.yaml
-  responses:
-    '201':
-      description: Task created sucessfully
-      content:
-        application/json:
-          schema:
-            $ref: ../components/schemas/Task.yaml
-    '400':
-      $ref: ../components/responses/BadRequest.yaml
+          type: integer
+    responses:
+      '200':
+        description: Task found
+        content:
+          application/json:
+            schema:
+              $ref: ../components/schemas/Task.yaml
+      '400':
+        $ref: ../components/responses/BadRequest.yaml
+      '404':
+        $ref: ../components/responses/NotFound.yaml

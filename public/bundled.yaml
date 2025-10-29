@@ -13,27 +13,12 @@ tags:
 paths:
   /tasks:
     get:
-      summary: List all tasks
       tags:
         - Tasks
-      parameters:
-        - name: completed
-          in: query
-          required: false
-          description: Filter tasks by completion status
-          schema:
-            type: boolean
-            example: true
-        - name: limit
-          in: query
-          required: false
-          description: Maximum number of tasks to return
-          schema:
-            type: integer
-            example: 10
+      summary: List all tasks
       responses:
         '200':
-          description: OK
+          description: A list of tasks
           content:
             application/json:
               schema:
@@ -41,24 +26,54 @@ paths:
                 items:
                   $ref: '#/components/schemas/Task'
     post:
-      summary: Create a new task
       tags:
         - Tasks
+      summary: Create a new task
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Task'
+              type: object
+              required:
+                - title
+              properties:
+                title:
+                  type: string
+                completed:
+                  type: boolean
       responses:
         '201':
-          description: Task created sucessfully
+          description: Created task
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Task'
         '400':
           $ref: '#/components/responses/BadRequest'
+  /tasks/{id}:
+    get:
+      tags:
+        - Tasks
+      summary: Get a task by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Numeric task ID
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Task found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
 components:
   schemas:
     Task:
@@ -84,6 +99,14 @@ components:
           type: array
           items:
             type: string
+          example:
+            - ID must be a number
+    NotFoundError:
+      type: object
+      properties:
+        error:
+          type: string
+          example: Task not found
   responses:
     BadRequest:
       description: Invalid input
@@ -91,3 +114,9 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ValidationError'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NotFoundError'
