@@ -9,7 +9,7 @@ export async function create(data) {
   return prisma.task.create({ data });
 }
 
-// NEW: find a single task by numeric id
+
 export async function findById(id) {
-  return prisma.task.findUnique({ where: { id } });
+  return prisma.task.findUnique({ where: { id: Number(id) } });
 }
