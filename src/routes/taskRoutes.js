@@ -1,15 +1,12 @@
 // src/routes/taskRoutes.js
 import express from 'express';
-import * as taskController from '../controllers/taskController.js';
+import { getTasks, createTask, getTaskById } from '../controllers/taskController.js';
 import { validateTask } from '../middleware/validateTask.js';
-import { validateId } from '../middleware/validateId.js';
 
 const router = express.Router();
 
-router.get('/', taskController.getTasks);
-router.post('/', validateTask, taskController.createTask);
-
-
-router.get('/:id', validateId, taskController.getTaskById);
+router.get('/', getTasks);
+router.post('/', validateTask, createTask);
+router.get('/:id', getTaskById);
 
 export default router;

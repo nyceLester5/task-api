@@ -20,13 +20,12 @@ export async function createTask(req, res, next) {
   }
 }
 
-
 export async function getTaskById(req, res, next) {
   try {
-    const idNum = Number(req.params.id);
+    const idNum = parseInt(req.params.id, 10);
 
-   
-    if (!Number.isInteger(idNum) || idNum <= 0) {
+    // invalid like "abc", "2.5", "", "-1"
+    if (isNaN(idNum)) {
       return res.status(400).json({
         error: 'Validation failed',
         details: ['ID must be a number'],
@@ -34,11 +33,16 @@ export async function getTaskById(req, res, next) {
     }
 
     const task = await taskService.getTaskById(idNum);
+
     if (!task) {
       return res.status(404).json({ error: 'Task not found' });
     }
 
-    return res.status(200).json(task);
+    return res.status(200).json({
+      id: task.id,
+      title: task.title,
+      completed: task.completed,
+    });
   } catch (err) {
     next(err);
   }

@@ -1,3 +1,4 @@
+// src/services/taskService.js
 import * as taskRepo from '../repositories/taskRepo.js';
 
 export async function getAllTasks() {
@@ -7,7 +8,6 @@ export async function getAllTasks() {
 export async function createTask(data) {
   return taskRepo.create(data);
 }
-
 
 export async function getTaskById(id) {
   return taskRepo.findById(id);
