@@ -3,14 +3,15 @@
   "version": "1.0.0",
   "description": "A simple Node.js + Express + Prisma API for managing tasks",
   "main": "src/server.js",
+  "type": "module",
   "scripts": {
     "dev": "node --env-file=.env --watch src/server.js",
     "start": "node src/server.js",
+    "prestart": "npx @redocly/cli bundle docs/openapi.yaml -o public/bundled.yaml",
     "migrate:dev": "npx prisma migrate dev",
     "migrate:deploy": "npx prisma migrate deploy",
     "seed": "node prisma/seed.js",
-    "build": "npx prisma migrate deploy && npm run seed && npx @redocly/cli bundle docs/openapi.yaml -o public/bundled.yaml"
-    
+    "build": "npx prisma migrate deploy && npm run seed"
   },
   "keywords": [
     "node",
@@ -22,7 +23,6 @@
   ],
   "author": "",
   "license": "ISC",
-  "type": "module",
   "dependencies": {
     "@prisma/client": "^6.16.2",
     "cors": "^2.8.5",
